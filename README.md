@@ -29,12 +29,12 @@ API Specification using https://jsonapi.org/ standarization.
 
 ### Create Category
 Request :
-    - Method : POST
-    - Endpoint : /api/v1/categories
-    - Header : 
-        - Content-Type: application/json
-        - Accept: application/json
-    - Body :
+- Method : POST
+- Endpoint : /api/v1/categories
+- Header : 
+    - Content-Type: application/json
+    - Accept: application/json
+- Body :
 ```json
 {
     "name" : "string" 
