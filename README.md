@@ -29,20 +29,20 @@ API Specification using https://jsonapi.org/ standarization.
 
 ### Create Category
 Request :
-    * Method : POST
-    * Endpoint : /api/v1/categories
-    * Header : 
-        * Content-Type: application/json
-        * Accept: application/json
-    * Body :
-```
+    - Method : POST
+    - Endpoint : /api/v1/categories
+    - Header : 
+        - Content-Type: application/json
+        - Accept: application/json
+    - Body :
+```json
 {
     "name" : "string" 
 }
 ```
 
 Response :
-```
+```json
 {
     "links": {
         "self": "string"
@@ -60,13 +60,13 @@ Response :
 
 ### List Category
 Request :
-    * Method : GET
-    * Endpoint : /api/v1/categories
-    * Header : 
-        * Accept: application/json
+    - Method : GET
+    - Endpoint : /api/v1/categories
+    - Header : 
+        - Accept: application/json
 
 Response :
-```
+```json
 {
     "links": {
         "self": "string"
@@ -92,13 +92,13 @@ Response :
 
 ### Get Category
 Request :
-    * Method : GET
-    * Endpoint : /api/v1/categories/{id_category}
-    * Header : 
-        * Accept: application/json
+    - Method : GET
+    - Endpoint : /api/v1/categories/{id_category}
+    - Header : 
+        - Accept: application/json
 
 Response :
-```
+```json
 {
     "links": {
         "self": "string"
@@ -116,20 +116,20 @@ Response :
 
 ### Update Category
 Request :
-    * Method : PUT
-    * Endpoint : /api/v1/categories/{id_category}
-    * Header : 
-        * Content-Type: application/json
-        * Accept: application/json
-    * Body :
-```
+    - Method : PUT
+    - Endpoint : /api/v1/categories/{id_category}
+    - Header : 
+        - Content-Type: application/json
+        - Accept: application/json
+    - Body :
+```json
 {
     "name" : "string" 
 }
 ```
 
 Response :
-```
+```json
 {
     "links": {
         "self": "string"
@@ -147,10 +147,10 @@ Response :
 
 ### Delete Category
 Request :
-    * Method : DELETE
-    * Endpoint : /api/v1/categories/{id_category}
-    * Header : 
-        * Accept: application/json
+    - Method : DELETE
+    - Endpoint : /api/v1/categories/{id_category}
+    - Header : 
+        - Accept: application/json
 
 Response :
 `The server responds with only top-level meta data`
