@@ -24,7 +24,7 @@ Build an API based catering management application using Ruby on Rails This cate
     * Total price
     * Date range
 
-## API Documentaion/Specification
+## API Documentation/Specification
 API Specification using https://jsonapi.org/ standarization.
 
 ### Create Category
@@ -51,7 +51,9 @@ Response :
         "type": "string",
         "id": "integer, unique",
         "attributes": {
-            "name": "string"
+            "name": "string",
+            "createdAt" : "datetime",
+            "updatedAt" : "datetime"
         }
     }
 }
@@ -60,10 +62,10 @@ Response :
 
 ### List Category
 Request :
-    - Method : GET
-    - Endpoint : /api/v1/categories
-    - Header : 
-        - Accept: application/json
+- Method : GET
+- Endpoint : /api/v1/categories
+- Header : 
+    - Accept: application/json
 
 Response :
 ```json
@@ -76,14 +78,24 @@ Response :
             "type": "string",
             "id": "integer, unique",
             "attributes": {
-                "name": "string"
+                "name": "string",
+                "createdAt" : "datetime",
+                "updatedAt" : "datetime"
+            },
+            "links": {
+                "self": "string"
             }
         },
         {
             "type": "string",
             "id": "integer, unique",
             "attributes": {
-                "name": "string"
+                "name": "string",
+                "createdAt" : "datetime",
+                "updatedAt" : "datetime"
+            },
+            "links": {
+                "self": "string"
             }
         },
     ]
@@ -92,10 +104,10 @@ Response :
 
 ### Get Category
 Request :
-    - Method : GET
-    - Endpoint : /api/v1/categories/{id_category}
-    - Header : 
-        - Accept: application/json
+- Method : GET
+- Endpoint : /api/v1/categories/{id_category}
+- Header : 
+    - Accept: application/json
 
 Response :
 ```json
@@ -107,7 +119,9 @@ Response :
         "type": "string",
         "id": "integer, unique",
         "attributes": {
-            "name": "string"
+            "name": "string",
+            "createdAt" : "datetime",
+            "updatedAt" : "datetime"
         }
     }
 }
@@ -116,12 +130,12 @@ Response :
 
 ### Update Category
 Request :
-    - Method : PUT
-    - Endpoint : /api/v1/categories/{id_category}
-    - Header : 
-        - Content-Type: application/json
-        - Accept: application/json
-    - Body :
+- Method : PUT
+- Endpoint : /api/v1/categories/{id_category}
+- Header : 
+    - Content-Type: application/json
+    - Accept: application/json
+- Body :
 ```json
 {
     "name" : "string" 
@@ -138,7 +152,9 @@ Response :
         "type": "string",
         "id": "integer, unique",
         "attributes": {
-            "name": "string"
+            "name": "string",
+            "createdAt" : "datetime",
+            "updatedAt" : "datetime"
         }
     }
 }
@@ -147,13 +163,299 @@ Response :
 
 ### Delete Category
 Request :
-    - Method : DELETE
-    - Endpoint : /api/v1/categories/{id_category}
-    - Header : 
-        - Accept: application/json
+- Method : DELETE
+- Endpoint : /api/v1/categories/{id_category}
+- Header : 
+    - Accept: application/json
 
 Response :
 `The server responds with only top-level meta data`
 
+### Create Menu Item
+Request :
+- Method : POST
+- Endpoint : /api/v1/menu-items
+- Header : 
+    - Content-Type: application/json
+    - Accept: application/json
+- Body :
+```json
+{
+    "name" : "string, unique",
+    "description": "string, maxLength: 150",
+    "price": "long, minValue: 0.01",
+    "categories": [
+        {"id": "integer"},
+        {"id": "integer"}
+    ]
+}
+```
 
+Response :
+```json
+{
+    "links": {
+        "self": "string"
+    },
+    "data": {
+        "type": "string",
+        "id": "integer, unique",
+        "attributes": {
+            "name": "string",
+            "description": "string",
+            "price": "long",
+            "createdAt" : "datetime",
+            "updatedAt" : "datetime"
+        },
+        "relationships": {
+            "menu_categories": {
+                "links": {
+                    "self": "string",
+                    "related": "string"
+                },
+                "data": [
+                    {
+                        "type": "string",
+                        "id": "integer",
+                        "attributes": {
+                            "name": "string"
+                        }
+                    },
+                    {
+                        "type": "string",
+                        "id": "integer",
+                        "attributes": {
+                            "name": "string"
+                        }
+                    }
+                ]
+            }
+        }
+    }
+}
+
+```
+
+### List Category
+Request :
+- Method : GET
+- Endpoint : /api/v1/menu-items
+- Header : 
+    - Accept: application/json
+
+Response :
+```json
+{
+    "links": {
+        "self": "string"
+    },
+    "data": [
+        {
+            "type": "string",
+            "id": "integer, unique",
+            "attributes": {
+                "name": "string",
+                "description": "string",
+                "price": "long",
+                "createdAt" : "datetime",
+                "updatedAt" : "datetime"
+            },  
+            "links": {
+                "self": "string"
+            },
+            "relationships": {
+                "menu_categories": {
+                    "links": {
+                        "self": "string",
+                        "related": "string"
+                    },
+                    "data": [
+                        {
+                            "type": "string",
+                            "id": "integer",
+                            "attributes": {
+                                "name": "string"
+                            }
+                        },
+                        {
+                            "type": "string",
+                            "id": "integer",
+                            "attributes": {
+                                "name": "string"
+                            }
+                        }
+                    ]
+                }
+            }
+        },
+        {
+            "type": "string",
+            "id": "integer, unique",
+            "attributes": {
+                "name": "string",
+                "description": "string",
+                "price": "long",
+                "createdAt" : "datetime",
+                "updatedAt" : "datetime"
+            }, 
+            "links": {
+                "self": "string"
+            },
+            "relationships": {
+                "menu_categories":{
+                    "links": {
+                        "self": "string",
+                        "related": "string"
+                    },
+                    "data": [
+                        {
+                            "type": "string",
+                            "id": "integer",
+                            "attributes": {
+                                "name": "string"
+                            }
+                        },
+                        {
+                            "type": "string",
+                            "id": "integer",
+                            "attributes": {
+                                "name": "string"
+                            }
+                        }
+                    ]
+                }
+            }
+        },
+    ]
+}
+```
+
+### Get Menu Item
+Request :
+- Method : GET
+- Endpoint : /api/v1/menu-items/{id_menu_item}
+- Header : 
+    - Accept: application/json
+
+Response :
+```json
+{
+    "links": {
+        "self": "string"
+    },
+    "data": [
+        {
+            "type": "string",
+            "id": "integer, unique",
+            "attributes": {
+                "name": "string",
+                "description": "string",
+                "price": "long",
+                "createdAt" : "datetime",
+                "updatedAt" : "datetime"
+            },
+            "relationships": {
+                "menu_categories": {
+                    "links": {
+                        "self": "string",
+                        "related": "string"
+                    },
+                    "data": [
+                        {
+                            "type": "string",
+                            "id": "integer",
+                            "attributes": {
+                                "name": "string"
+                            }
+                        },
+                        {
+                            "type": "string",
+                            "id": "integer",
+                            "attributes": {
+                                "name": "string"
+                            }
+                        }
+                    ]
+                }
+            }
+        }
+    ]
+}
+```
+
+### Update Menu Item
+Request :
+- Method : PUT
+- Endpoint : /api/v1/menu-items/{id_menu_item}
+- Header : 
+    - Content-Type: application/json
+    - Accept: application/json
+- Body :
+```json
+{
+    "name" : "string, unique",
+    "description": "string, maxLength: 150",
+    "price": "long, minValue: 0.01",
+    "categories": [
+        {"id": "integer"},
+        {"id": "integer"}
+    ]
+}
+```
+
+Response :
+```json
+{
+    "links": {
+        "self": "string"
+    },
+    "data": [
+        {
+            "type": "string",
+            "id": "integer, unique",
+            "attributes": {
+                "name": "string",
+                "description": "string",
+                "price": "long",
+                "createdAt" : "datetime",
+                "updatedAt" : "datetime"
+            },
+            "relationships": {
+                "menu_categories": {
+                    "links": {
+                        "self": "string",
+                        "related": "string"
+                    },
+                    "data": [
+                        {
+                            "type": "string",
+                            "id": "integer",
+                            "attributes": {
+                                "name": "string"
+                            }
+                        },
+                        {
+                            "type": "string",
+                            "id": "integer",
+                            "attributes": {
+                                "name": "string"
+                            }
+                        }
+                    ]
+                }
+            }
+        }
+    ]
+}
+```
+
+### Delete Menu Item
+Request :
+- Method : DELETE
+- Endpoint : /api/v1/menu-items/{id_menu_items}
+- Header : 
+    - Accept: application/json
+
+Response :
+`The server responds with only top-level meta data`
 
