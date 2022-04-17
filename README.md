@@ -236,7 +236,7 @@ Response :
 
 ```
 
-### List Category
+### List Menu Items
 Request :
 - Method : GET
 - Endpoint : /api/v1/menu-items
@@ -459,3 +459,334 @@ Request :
 Response :
 `The server responds with only top-level meta data`
 
+### Create Order
+Request :
+- Method : POST
+- Endpoint : /api/v1/orders
+- Header : 
+    - Content-Type: application/json
+    - Accept: application/json
+- Body :
+```json
+{
+    "name" : "string, unique",
+    "description": "string, maxLength: 150",
+    "price": "long, minValue: 0.01",
+    "categories": [
+        {"id": "integer"},
+        {"id": "integer"}
+    ],
+    "orderDate": "date",
+    "customerEmail": "string",
+    "orderItems": [
+        {
+            "itemId": "integer",
+            "quantity": "integer"
+        },
+        {
+            "itemId": "integer",
+            "quantity": "integer"
+        },
+    ]
+}
+```
+
+Response :
+```json
+{
+    "links": {
+        "self": "string"
+    },
+    "data": {
+        "type": "string",
+        "id": "integer, unique",
+        "attributes": {
+            "orderDate": "date",
+            "customerEmail": "string",
+            "totalPrice": "long",
+            "status": "string",
+            "createdAt" : "datetime",
+            "updatedAt" : "datetime"
+        },
+        "relationships": {
+            "order_details": {
+                "links": {
+                    "self": "string",
+                    "related": "string"
+                },
+                "data": [
+                    {
+                        "type": "string",
+                        "id": "integer",
+                        "attributes": {
+                            "price": "long",
+                            "quantity": "integer",
+                            "subtotal": "long",
+                        }
+                    },
+                    {
+                        "type": "string",
+                        "id": "integer",
+                        "attributes": {
+                            "price": "long",
+                            "quantity": "integer",
+                            "subtotal": "long",
+                        }
+                    }
+                ]
+            }
+        }
+    }
+}
+```
+
+### List Orders
+Request :
+- Method : GET
+- Endpoint : /api/v1/orders
+- Header : 
+    - Accept: application/json
+
+Response :
+```json
+{
+    "links": {
+        "self": "string"
+    },
+    "data": [
+        {
+            "type": "string",
+            "id": "integer, unique",
+            "attributes": {
+                "orderDate": "date",
+                "customerEmail": "string",
+                "totalPrice": "long",
+                "status": "string",
+                "createdAt" : "datetime",
+                "updatedAt" : "datetime"
+            },
+            "links": {
+                "self": "string"
+            },
+            "relationships": {
+                "order_details": {
+                    "links": {
+                        "self": "string",
+                        "related": "string"
+                    },
+                    "data": [
+                        {
+                            "type": "string",
+                            "id": "integer",
+                            "attributes": {
+                                "price": "long",
+                                "quantity": "integer",
+                                "subtotal": "long",
+                            }
+                        },
+                        {
+                            "type": "string",
+                            "id": "integer",
+                            "attributes": {
+                                "price": "long",
+                                "quantity": "integer",
+                                "subtotal": "long",
+                            }
+                        }
+                    ]
+                }
+            }
+        },
+        {
+            "type": "string",
+            "id": "integer, unique",
+            "attributes": {
+                "orderDate": "date",
+                "customerEmail": "string",
+                "totalPrice": "long",
+                "status": "string",
+                "createdAt" : "datetime",
+                "updatedAt" : "datetime"
+            },
+            "links": {
+                "self": "string"
+            },
+            "relationships": {
+                "order_details": {
+                    "links": {
+                        "self": "string",
+                        "related": "string"
+                    },
+                    "data": [
+                        {
+                            "type": "string",
+                            "id": "integer",
+                            "attributes": {
+                                "price": "long",
+                                "quantity": "integer",
+                                "subtotal": "long",
+                            }
+                        },
+                        {
+                            "type": "string",
+                            "id": "integer",
+                            "attributes": {
+                                "price": "long",
+                                "quantity": "integer",
+                                "subtotal": "long",
+                            }
+                        }
+                    ]
+                }
+            }
+        }
+    ]
+}
+```
+
+### Get Order
+Request :
+- Method : GET
+- Endpoint : /api/v1/orders/{id_orders}
+- Header : 
+    - Accept: application/json
+
+Response :
+```json
+{
+    "links": {
+        "self": "string"
+    },
+    "data": {
+        "type": "string",
+        "id": "integer, unique",
+        "attributes": {
+            "orderDate": "date",
+            "customerEmail": "string",
+            "totalPrice": "long",
+            "status": "string",
+            "createdAt" : "datetime",
+            "updatedAt" : "datetime"
+        },
+        "relationships": {
+            "order_details": {
+                "links": {
+                    "self": "string",
+                    "related": "string"
+                },
+                "data": [
+                    {
+                        "type": "string",
+                        "id": "integer",
+                        "attributes": {
+                            "price": "long",
+                            "quantity": "integer",
+                            "subtotal": "long",
+                        }
+                    },
+                    {
+                        "type": "string",
+                        "id": "integer",
+                        "attributes": {
+                            "price": "long",
+                            "quantity": "integer",
+                            "subtotal": "long",
+                        }
+                    }
+                ]
+            }
+        }
+    }
+}
+```
+
+### Update Orders
+Request :
+- Method : PUT
+- Endpoint : /api/v1/menu-items/{id_menu_item}
+- Header : 
+    - Content-Type: application/json
+    - Accept: application/json
+- Body :
+```json
+{
+    "name" : "string, unique",
+    "description": "string, maxLength: 150",
+    "price": "long, minValue: 0.01",
+    "categories": [
+        {"id": "integer"},
+        {"id": "integer"}
+    ],
+    "orderDate": "date",
+    "customerEmail": "string",
+    "orderItems": [
+        {
+            "itemId": "integer",
+            "quantity": "integer"
+        },
+        {
+            "itemId": "integer",
+            "quantity": "integer"
+        },
+    ]
+}
+```
+
+Response :
+```json
+{
+    "links": {
+        "self": "string"
+    },
+    "data": {
+        "type": "string",
+        "id": "integer, unique",
+        "attributes": {
+            "orderDate": "date",
+            "customerEmail": "string",
+            "totalPrice": "long",
+            "status": "string",
+            "createdAt" : "datetime",
+            "updatedAt" : "datetime"
+        },
+        "relationships": {
+            "order_details": {
+                "links": {
+                    "self": "string",
+                    "related": "string"
+                },
+                "data": [
+                    {
+                        "type": "string",
+                        "id": "integer",
+                        "attributes": {
+                            "price": "long",
+                            "quantity": "integer",
+                            "subtotal": "long",
+                        }
+                    },
+                    {
+                        "type": "string",
+                        "id": "integer",
+                        "attributes": {
+                            "price": "long",
+                            "quantity": "integer",
+                            "subtotal": "long",
+                        }
+                    }
+                ]
+            }
+        }
+    }
+}
+```
+
+### Delete Order
+Request :
+- Method : DELETE
+- Endpoint : /api/v1/orders/{id_order}
+- Header : 
+    - Accept: application/json
+
+Response :
+`The server responds with only top-level meta data`
