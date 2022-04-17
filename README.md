@@ -1,8 +1,8 @@
 # Final Project Assignment Backend Generasi GIGIH 2.0
 
-Build an API based catering management application using Ruby on Rails.
+Build an API based catering management application using Ruby on Rails This catering management will facilitate the owner to be able to store menus, record orders, and view reports in an easier way.
 
-# Use Case
+## Use Case
 1. The owner adds a menu item with the following terms:
     * Menu names cannot be duplicates
     * Price cannot be less than 0.01
@@ -23,3 +23,137 @@ Build an API based catering management application using Ruby on Rails.
     * Specific customer email
     * Total price
     * Date range
+
+## API Documentaion/Specification
+API Specification using https://jsonapi.org/ standarization.
+
+### Create Category
+Request :
+    * Method : POST
+    * Endpoint : /api/v1/categories
+    * Header : 
+        * Content-Type: application/json
+        * Accept: application/json
+    * Body :
+```
+{
+    "name" : "string" 
+}
+```
+
+Response :
+```
+{
+    "links": {
+        "self": "string"
+    },
+    "data": {
+        "type": "string",
+        "id": "integer, unique",
+        "attributes": {
+            "name": "string"
+        }
+    }
+}
+
+```
+
+### List Category
+Request :
+    * Method : GET
+    * Endpoint : /api/v1/categories
+    * Header : 
+        * Accept: application/json
+
+Response :
+```
+{
+    "links": {
+        "self": "string"
+    },
+    "data": [
+        {
+            "type": "string",
+            "id": "integer, unique",
+            "attributes": {
+                "name": "string"
+            }
+        },
+        {
+            "type": "string",
+            "id": "integer, unique",
+            "attributes": {
+                "name": "string"
+            }
+        },
+    ]
+}
+```
+
+### Get Category
+Request :
+    * Method : GET
+    * Endpoint : /api/v1/categories/{id_category}
+    * Header : 
+        * Accept: application/json
+
+Response :
+```
+{
+    "links": {
+        "self": "string"
+    },
+    "data": {
+        "type": "string",
+        "id": "integer, unique",
+        "attributes": {
+            "name": "string"
+        }
+    }
+}
+
+```
+
+### Update Category
+Request :
+    * Method : PUT
+    * Endpoint : /api/v1/categories/{id_category}
+    * Header : 
+        * Content-Type: application/json
+        * Accept: application/json
+    * Body :
+```
+{
+    "name" : "string" 
+}
+```
+
+Response :
+```
+{
+    "links": {
+        "self": "string"
+    },
+    "data": {
+        "type": "string",
+        "id": "integer, unique",
+        "attributes": {
+            "name": "string"
+        }
+    }
+}
+
+```
+
+### Delete Category
+Request :
+    * Method : DELETE
+    * Endpoint : /api/v1/categories/{id_category}
+    * Header : 
+        * Accept: application/json
+
+Response :
+`The server responds with only top-level meta data`
+
+
+
