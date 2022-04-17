@@ -1,25 +1,25 @@
-# Rails on Replit
+# Final Project Assignment Backend Generasi GIGIH 2.0
 
-This is a template to get you started with Rails on Replit. It's ready to go so you can just hit run and start coding!
+Build an API based catering management application using Ruby on Rails.
 
-This template was generated using `rails new` (after you install the `rails` gem from the packager sidebar) so you can always do that if you prefer to set it up from scratch. The only had two make config changes we had to make to run it on Replit:
-
-- bind the app on `0.0.0.0` instead of `localhost` (see `.replit`)
-- allow `*.repl.co` hosts (see `config/environments/development.rb`)
-- allow the app to be iframed on `replit.com` (see `config/application.rb`)
-
-## Running the app
-
-Simple hit run! You can edit the run command from the `.replit` file.
-
-## Running commands
-
-Start every command with `bundle exec` so that it runs in the context of the installed gems environment. The console pane will give you output from the server but you can run arbitrary command from the shell without stopping the server.
-
-## Database
-
-SQLite would work in development but we don't recommend running it in production. Instead look into using the built-in [Replit database](http://docs.replit.com/misc/database). Otherwise you are welcome to connect databases from your favorite provider. 
-
-## Help
-
-If you need help you might be able to find an answer on our [docs](https://docs.replit.com) page. Alternatively you can [ask in the community](https://replit.com/talk/ask). Feel free to report bugs [here](https://replit.com/bugs) and give us feedback [here](https://Replit/feedback).
+# Use Case
+1. The owner adds a menu item with the following terms:
+    * Menu names cannot be duplicates
+    * Price cannot be less than 0.01
+    * Description must not exceed 150 characters
+    * One menu can have one or many categories
+2. Owner updated menu item records
+3. Owner sees all menu items
+4. Owner deletes menu items
+5. Owner adds orders from customers with the following terms:
+    * Every order, the owner saves a valid email from the customer
+    * One customer can order more than one food menu in one order.
+    * For each food menu, customers can order more than one serving.
+    * If there is a price change in the menu item data, the price on the order that has occurred is not affected
+    * Owner sees total price from each order
+6. Owner can update orders from customers or change order status
+7. The system can automatically change the order status to CANCELED if the order has not been paid until 5 pm
+8. Owners can view daily reports and can filter them according to:
+    * Specific customer email
+    * Total price
+    * Date range
