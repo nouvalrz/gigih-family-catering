@@ -4,7 +4,7 @@ class Api::V1::CategoriesController < ApplicationController
     render json: CategorySerializer.new(categories).serializable_hash.to_json
   end
   def show
-    @category = Category.find_by(params[:id])
+    @category = Category.find_by(id: params[:id])
     render json: CategorySerializer.new(@category).serializable_hash.to_json
   end
 end
