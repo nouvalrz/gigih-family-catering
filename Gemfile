@@ -79,4 +79,5 @@ group :development, :test do
   gem "faker"
   gem 'rails-controller-testing'
   gem 'jsonapi-serializer', '~> 2.2'
+  gem 'jsonapi-rspec', '~> 0.0.11'
 end
