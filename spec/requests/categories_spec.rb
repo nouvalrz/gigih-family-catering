@@ -83,5 +83,19 @@ RSpec.describe 'Categories', type: :request do
         expect(response).to have_http_status(:success)
       end
     end
+    context 'with valid parameters but already exits in database' do
+      before do
+        category1 = FactoryBot.create(:category, name: 'Dessert')
+        category2 = FactoryBot.create(:category, name: 'Beverage')
+        category_update = FactoryBot.build(:category, name: 'Dessert')
+        put "/api/v1/categories/#{category2.id}", params: CategorySerializer.new(category_update).serializable_hash
+      end
+      it 'returns error already been taken' do
+        expect(json['errors'][0]['title']).to eq('Name has already been taken')
+      end
+      it 'return a unprocessable entity status' do
+        expect(response).to have_http_status(:unprocessable_entity)
+      end
+    end
   end
 end
