@@ -97,5 +97,18 @@ RSpec.describe 'Categories', type: :request do
         expect(response).to have_http_status(:unprocessable_entity)
       end
     end
+    context 'with invalid parameter' do
+      before do
+        category = FactoryBot.create(:category, name: 'Dessert')
+        category_update = FactoryBot.build(:category, name: '')
+        put "/api/v1/categories/#{category.id}", params: CategorySerializer.new(category_update).serializable_hash
+      end
+      it "returns error name can't be blank" do
+        expect(json['errors'][0]['title']).to eq("Name can't be blank")
+      end
+      it 'returns a unprocessable entity status' do
+        expect(response).to have_http_status(:unprocessable_entity)
+      end
+    end
   end
 end
