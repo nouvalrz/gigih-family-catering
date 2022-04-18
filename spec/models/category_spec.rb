@@ -23,4 +23,10 @@ RSpec.describe Category, type: :model do
 
     expect(category2.errors[:name]).to include('has already been taken')
   end
+
+  it 'is invalid with a word has more than 25 chars' do
+    category = FactoryBot.build(:category, name: 'Makanan dan Minuman Indonesia')
+    category.valid?
+    expect(category.errors[:name]).to include('25 characters is the maximum allowed')
+  end
 end
