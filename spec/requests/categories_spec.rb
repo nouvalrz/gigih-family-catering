@@ -20,5 +20,11 @@ RSpec.describe 'Categories', type: :request do
       end
     end
   end
-
+  describe "GET /show" do
+    it "assigns the requested category to @category" do
+      category = FactoryBot.create(:category)
+      get "/api/v1/categories/#{category.id}"
+      expect(assigns(:category)).to eq category
+    end
+  end
 end
