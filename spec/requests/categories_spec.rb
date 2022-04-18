@@ -9,5 +9,8 @@ RSpec.describe 'Categories', type: :request do
     it 'returns all categories' do
       expect(json['data'].size).to eq(10)
     end
+    it 'returns status code 200' do
+      expect(response).to have_http_status(:success)
+    end
   end
 end
