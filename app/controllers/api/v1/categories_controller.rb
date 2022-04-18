@@ -24,6 +24,15 @@ class Api::V1::CategoriesController < ApplicationController
       render json: ErrorSerializer.serialize(category.errors), status: :unprocessable_entity
     end
   end
+  def destroy
+    category = Category.find_by(id: params[:id])
+    if category.nil?
+      head :unprocessable_entity
+    else
+      category.destroy
+      head :no_content
+    end
+  end
   private
   def category_params
     params.require(:data)

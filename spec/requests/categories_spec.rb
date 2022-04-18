@@ -111,4 +111,24 @@ RSpec.describe 'Categories', type: :request do
       end
     end
   end
+  describe 'DELETE /destroy' do
+    context 'with exits records' do
+      before do
+        category = FactoryBot.create(:category, name: 'Dessert')
+        delete "/api/v1/categories/#{category.id}"
+      end
+      it 'returns status code 204' do
+        expect(response).to have_http_status(204)
+      end
+    end
+    context 'with non exists records' do
+      before do
+        FactoryBot.create(:category, name: 'Dessert')
+        delete '/api/v1/categories/12'
+      end
+      it 'return a unprocessable entity status' do
+        expect(response).to have_http_status(:unprocessable_entity)
+      end
+    end
+  end
 end
