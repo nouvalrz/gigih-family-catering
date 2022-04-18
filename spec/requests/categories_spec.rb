@@ -68,4 +68,16 @@ RSpec.describe 'Categories', type: :request do
       end
     end
   end
+  describe 'PUT /update' do
+    context 'with valid parameters' do
+      it 'update the selected category in the database' do
+        category = FactoryBot.create(:category)
+        category_update = FactoryBot.build(:category, name: 'Dessert')
+        put "/api/v1/categories/#{category.id}", params: CategorySerializer.new(category_update).serializable_hash
+        puts json
+        expect(json['data']['attributes']['name']).to eq(category_update.name)
+      end
+      it 'returns a status 200'
+    end
+  end
 end

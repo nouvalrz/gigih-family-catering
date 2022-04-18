@@ -16,7 +16,14 @@ class Api::V1::CategoriesController < ApplicationController
       render json: ErrorSerializer.serialize(category.errors), status: :unprocessable_entity
     end
   end
-
+  def update
+    category = Category.find_by(id: params[:id])
+    if category.update(category_params)
+      render json: CategorySerializer.new(category).serializable_hash.to_json, status: 200
+    else
+      render json: ErrorSerializer.serialize(category.errors), status: :unprocessable_entity
+    end
+  end
   private
   def category_params
     params.require(:data)
