@@ -1,6 +1,5 @@
-module Api
-  module V1
-    class CategoriesController < ApplicationController
-    end
+class Api::V1::CategoriesController < ApplicationController
+  def index
+    categories = Category.all
   end
 end
