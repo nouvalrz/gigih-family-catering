@@ -31,26 +31,37 @@ RSpec.describe 'Categories', type: :request do
     context 'with valid parameters' do
       it 'saves the new category in the database' do
         expect{
-          category = FactoryBot.create(:category)
+          category = FactoryBot.build(:category)
           post '/api/v1/categories', params: CategorySerializer.new(category).serializable_hash
         }.to change(Category, :count).by(1)
+      end
+      it 'returns a created status' do
+        category = FactoryBot.build(:category)
+        post '/api/v1/categories', params: CategorySerializer.new(category).serializable_hash
+        expect(response).to have_http_status(:created)
       end
     end
     context 'with valid parameters but already exits in database' do
       before do
-        category = FactoryBot.create(:category, name: 'Javanese')
-        post '/api/v1/categories', params: CategorySerializer.new(category).serializable_hash
+        category1 = FactoryBot.create(:category, name: 'Javanese')
+        category2 = FactoryBot.build(:category, name: 'Javanese')
+        post '/api/v1/categories', params: CategorySerializer.new(category1).serializable_hash
+        post '/api/v1/categories', params: CategorySerializer.new(category2).serializable_hash
       end
       it 'returns error already been taken' do
-        category = FactoryBot.build(:category, name: 'Javanese')
-        post '/api/v1/categories', params: CategorySerializer.new(category).serializable_hash
         expect(json['errors'][0]['title']).to eq('Name has already been taken')
+      end
+      it 'return a unprocessable entity status' do
+        expect(response).to have_http_status(:unprocessable_entity)
       end
     end
     context 'with invalid parameter' do
       before do
         category = FactoryBot.build(:category, name: '')
         post '/api/v1/categories', params: CategorySerializer.new(category).serializable_hash
+      end
+      it "returns error name can't be blank" do
+        expect(json['errors'][0]['title']).to eq("Name can't be blank")
       end
       it 'returns a unprocessable entity status' do
         expect(response).to have_http_status(:unprocessable_entity)
