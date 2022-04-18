@@ -11,9 +11,9 @@ class Api::V1::CategoriesController < ApplicationController
   def create
     category = Category.new(category_params)
     if category.save
-      render json: CategorySerializer.new(category).serializable_hash.to_json
+      render json: CategorySerializer.new(category).serializable_hash.to_json, status: :created
     else
-      render json: ErrorSerializer.serialize(category.errors)
+      render json: ErrorSerializer.serialize(category.errors), status: :unprocessable_entity
     end
   end
 

@@ -44,7 +44,16 @@ RSpec.describe 'Categories', type: :request do
       it 'returns error already been taken' do
         category = FactoryBot.build(:category, name: 'Javanese')
         post '/api/v1/categories', params: CategorySerializer.new(category).serializable_hash
-        expect(JSON.parse(response.body)['errors'][0]['title']).to eq('Name has already been taken')
+        expect(json['errors'][0]['title']).to eq('Name has already been taken')
+      end
+    end
+    context 'with invalid parameter' do
+      before do
+        category = FactoryBot.build(:category, name: '')
+        post '/api/v1/categories', params: CategorySerializer.new(category).serializable_hash
+      end
+      it 'returns a unprocessable entity status' do
+        expect(response).to have_http_status(:unprocessable_entity)
       end
     end
   end
