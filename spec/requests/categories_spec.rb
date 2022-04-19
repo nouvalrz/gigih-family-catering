@@ -113,9 +113,12 @@ RSpec.describe 'Categories', type: :request do
   end
   describe 'DELETE /destroy' do
     context 'with exits records' do
+      let(:category) {FactoryBot.create(:category, name: 'Dessert')} 
       before do
-        category = FactoryBot.create(:category, name: 'Dessert')
         delete "/api/v1/categories/#{category.id}"
+      end
+      it 'remove the category in database' do
+        expect{ category }.to change(Category, :count).by(0)
       end
       it 'returns status code 204' do
         expect(response).to have_http_status(204)
