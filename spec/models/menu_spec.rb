@@ -14,4 +14,18 @@ RSpec.describe Menu, type: :model do
     menu.valid?
     expect(menu.errors[:price]).to include("can't be blank")
   end
+  it 'is invalid with a duplicate name' do
+    menu1 = FactoryBot.create(:menu, name: 'Nasi Goreng')
+    menu2 = FactoryBot.build(:menu, name: 'Nasi Goreng')
+
+    menu2.valid?
+
+    expect(menu2.errors[:name]).to include('has already been taken')
+  end
+  it 'is invalid with a word has more than 150 chars' do
+    menu = FactoryBot.build(:menu, name: Faker::String.random(length: 151))
+    menu.valid?
+    expect(menu.errors[:name]).to include('150 characters is the maximum allowed')
+  end
+
 end
