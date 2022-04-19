@@ -1,8 +1,8 @@
 FactoryBot.define do
   factory :menu do
-    name { "MyString" }
-    price { 1.5 }
-    description { "MyText" }
+    name { Faker::Food.dish }
+    price { Faker::Commerce.price }
+    description { Faker::Food.description }
     is_deleted { 0 }
   end
 end
