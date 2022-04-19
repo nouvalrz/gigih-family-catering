@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_04_19_072531) do
+ActiveRecord::Schema.define(version: 2022_04_19_081533) do
 
   create_table "categories", force: :cascade do |t|
     t.string "name"
@@ -18,16 +18,16 @@ ActiveRecord::Schema.define(version: 2022_04_19_072531) do
     t.datetime "updated_at", precision: 6, null: false
   end
 
-  create_table "item_categories", force: :cascade do |t|
-    t.integer "menuitem_id", null: false
+  create_table "menu_categories", force: :cascade do |t|
+    t.integer "menu_id", null: false
     t.integer "category_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.index ["category_id"], name: "index_item_categories_on_category_id"
-    t.index ["menuitem_id"], name: "index_item_categories_on_menuitem_id"
+    t.index ["category_id"], name: "index_menu_categories_on_category_id"
+    t.index ["menu_id"], name: "index_menu_categories_on_menu_id"
   end
 
-  create_table "menu_items", force: :cascade do |t|
+  create_table "menus", force: :cascade do |t|
     t.string "name"
     t.float "price"
     t.text "description"
@@ -38,13 +38,13 @@ ActiveRecord::Schema.define(version: 2022_04_19_072531) do
 
   create_table "order_details", force: :cascade do |t|
     t.integer "order_id", null: false
-    t.integer "menuitem_id", null: false
-    t.float "menuitem_price"
+    t.integer "menu_id", null: false
+    t.float "menu_price"
     t.integer "quantity"
     t.float "subtotal"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.index ["menuitem_id"], name: "index_order_details_on_menuitem_id"
+    t.index ["menu_id"], name: "index_order_details_on_menu_id"
     t.index ["order_id"], name: "index_order_details_on_order_id"
   end
 
@@ -56,8 +56,8 @@ ActiveRecord::Schema.define(version: 2022_04_19_072531) do
     t.datetime "updated_at", precision: 6, null: false
   end
 
-  add_foreign_key "item_categories", "categories"
-  add_foreign_key "item_categories", "menuitems"
-  add_foreign_key "order_details", "menuitems"
+  add_foreign_key "menu_categories", "categories"
+  add_foreign_key "menu_categories", "menus"
+  add_foreign_key "order_details", "menus"
   add_foreign_key "order_details", "orders"
 end

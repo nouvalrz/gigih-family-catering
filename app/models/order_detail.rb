@@ -1,4 +1,4 @@
 class OrderDetail < ApplicationRecord
   belongs_to :order
-  belongs_to :menuitem
+  belongs_to :menu
 end

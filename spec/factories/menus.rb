@@ -1,5 +1,5 @@
 FactoryBot.define do
-  factory :menu_item do
+  factory :menu do
     name { "MyString" }
     price { 1.5 }
     description { "MyText" }
