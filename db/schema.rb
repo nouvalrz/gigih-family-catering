@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_04_19_093639) do
+ActiveRecord::Schema.define(version: 2022_04_20_165742) do
 
   create_table "categories", force: :cascade do |t|
     t.string "name"
@@ -39,9 +39,9 @@ ActiveRecord::Schema.define(version: 2022_04_19_093639) do
   create_table "order_details", force: :cascade do |t|
     t.integer "order_id", null: false
     t.integer "menu_id", null: false
-    t.float "menu_price"
-    t.integer "quantity"
-    t.float "subtotal"
+    t.float "menu_price", default: 0.0
+    t.integer "quantity", default: 0
+    t.float "subtotal", default: 0.0
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["menu_id"], name: "index_order_details_on_menu_id"

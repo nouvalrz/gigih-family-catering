@@ -188,7 +188,6 @@ RSpec.describe 'Menus', type: :request do
   describe 'DELETE /destroy' do
     context 'with exits records' do
       before :each do
-        # @menu = FactoryBot.create(:menu)
         @menu_category = FactoryBot.create(:menu_category)
       end
       it 'remove the menu in database' do
