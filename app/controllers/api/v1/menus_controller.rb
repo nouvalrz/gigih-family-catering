@@ -9,10 +9,30 @@ class Api::V1::MenusController < ApplicationController
     render json: MenuSerializer.new(@menu, options).serializable_hash.to_json
   end
 
-  private
+  def create
+    menu = Menu.new(menu_params)
+    if menu.valid? && menu.category_exits?(menu_category_params)
+      menu_category_params.each do |category| 
+        menu.categories << Category.find_by_id(category[:id])
+      end
+      menu.save
+      render json: MenuSerializer.new(menu, options).serializable_hash.to_json, status: :created
+    else
+      menu.errors.add(:menu, 'must have atleast one category') unless menu_category_params.present?
+      render json: ErrorSerializer.serialize(menu.errors), status: :unprocessable_entity
+    end
+  end
+
+  private 
   def options
     options = {
       include: [:categories]
     }
+  end
+  def menu_params
+    params.require(:menu).permit(:name, :price, :description)
+  end
+  def menu_category_params
+    params.permit(menu: [ { categories: :id } ] )[:menu][:categories].presence || []
   end
 end
