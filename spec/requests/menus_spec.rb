@@ -21,4 +21,13 @@ RSpec.describe 'Menus', type: :request do
       end
     end
   end
+  describe 'GET /show' do
+    it 'assigns the requested menu and category relationships to @menu' do
+      menu_categories = FactoryBot.create(:menu_category)
+      menu = Menu.first
+      get "/api/v1/menus/#{menu.id}"
+      expect(assigns(:menu)).to eq menu
+      expect(json['included'][0]).to have_type(:category)
+    end
+  end
 end
