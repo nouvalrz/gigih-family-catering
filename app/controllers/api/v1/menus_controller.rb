@@ -37,6 +37,17 @@ class Api::V1::MenusController < ApplicationController
     end
   end
 
+  def destroy
+    menu = Menu.find_by(id: params[:id])
+    if menu.nil?
+      head :unprocessable_entity
+    else
+      menu.categories.destroy_all
+      menu.destroy
+      head :no_content
+    end
+  end
+
   private 
   def options
     options = {

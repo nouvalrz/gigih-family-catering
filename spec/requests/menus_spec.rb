@@ -185,4 +185,31 @@ RSpec.describe 'Menus', type: :request do
       end
     end
   end
+  describe 'DELETE /destroy' do
+    context 'with exits records' do
+      before :each do
+        # @menu = FactoryBot.create(:menu)
+        @menu_category = FactoryBot.create(:menu_category)
+      end
+      it 'remove the menu in database' do
+        expect{ delete "/api/v1/menus/1" }.to change(Menu, :count).by(-1)
+      end
+      it 'remove the menu_categories in database' do
+        expect{ delete "/api/v1/menus/1" }.to change(MenuCategory, :count).by(-1)
+      end
+      it 'returns status code 204' do
+        delete "/api/v1/menus/1" 
+        expect(response).to have_http_status(204)
+      end
+    end
+    context 'with non exists records' do
+      before do
+        FactoryBot.create(:menu)
+        delete '/api/v1/menus/121212'
+      end
+      it 'return a unprocessable entity status' do
+        expect(response).to have_http_status(422)
+      end
+    end
+  end
 end
