@@ -1,6 +1,6 @@
 FactoryBot.define do
   factory :menu do
-    name { Faker::Food.dish }
+    sequence(:name) { |n| "#{Faker::Food.dish} #{n}" }
     price { Faker::Commerce.price }
     description { Faker::Food.description }
     is_deleted { 0 }
