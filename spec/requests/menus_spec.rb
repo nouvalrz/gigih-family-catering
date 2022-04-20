@@ -136,7 +136,7 @@ RSpec.describe 'Menus', type: :request do
     context 'with valid parameters' do
       let(:menu) {FactoryBot.create(:menu)}
       let(:menu_update) {FactoryBot.build(:menu, name: 'Ayam Panggang')}
-      let(:category_update) {FactoryBot.create(:menu, name: 'Indonesia')}
+      let(:category_update) {FactoryBot.create(:category, name: 'Indonesia')}
       before do
         put "/api/v1/menus/#{menu.id}", params: {
           menu: {
@@ -154,8 +154,34 @@ RSpec.describe 'Menus', type: :request do
         expect(json['data']['attributes']['description']).to eq(menu_update.description)
         expect(json['data']['attributes']['price']).to eq(menu_update.price)
       end
+      it 'update menu_categories from the selected menu' do
+        expect(json['included'][0]['attributes']['name']).to eq(category_update.name)
+      end
       it 'returns a status 200' do
         expect(response).to have_http_status(:success)
+      end
+    end
+    context 'with invalid parameter' do
+      let(:menu) {FactoryBot.create(:menu)}
+      let(:category_update) {FactoryBot.create(:category, name: 'Indonesia')}
+      before do
+        put "/api/v1/menus/#{menu.id}", params: {
+          menu: {
+            name: nil,
+            description: nil,
+            price: nil,
+            categories: [
+              {id: category_update.id}
+            ]
+          }
+        } 
+      end
+      it "returns error with nil in require attributes" do
+        expect(json['errors'][0]['title']).to eq("Name can't be blank")
+        expect(json['errors'][1]['title']).to eq("Price can't be blank")
+      end
+      it 'returns a unprocessable entity status' do
+        expect(response).to have_http_status(:unprocessable_entity)
       end
     end
   end

@@ -23,6 +23,20 @@ class Api::V1::MenusController < ApplicationController
     end
   end
 
+  def update
+    menu = Menu.find_by(id: params[:id])
+    menu.categories.destroy_all
+    if menu.update(menu_params) && menu.category_exits?(menu_category_params)
+      menu_category_params.each do |category| 
+        menu.categories << Category.find_by_id(category[:id])
+      end
+      render json: MenuSerializer.new(menu, options).serializable_hash.to_json, status: :created
+    else
+      menu.errors.add(:menu, 'must have atleast one category') unless menu_category_params.present?
+      render json: ErrorSerializer.serialize(menu.errors), status: :unprocessable_entity
+    end
+  end
+
   private 
   def options
     options = {
