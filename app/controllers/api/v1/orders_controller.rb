@@ -10,6 +10,18 @@ class Api::V1::OrdersController < ApplicationController
     end
   end
 
+  def update
+    order = Order.find_by(id: params[:id])
+    order.update(order_params)
+    order.order_details.destroy_all
+    order.add_menus(order_menu_params[:menus])
+    if order.errors.messages.empty? && order.update(order_params)
+      render json: OrderSerializer.new(order, options).serializable_hash.to_json, status: :created
+    else
+      render json: ErrorSerializer.serialize(order.errors), status: :unprocessable_entity
+    end
+  end
+
   private
   def order_params
     params.require(:order).permit(:customer_email, :order_date)

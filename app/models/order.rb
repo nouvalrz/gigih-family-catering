@@ -9,6 +9,10 @@ class Order < ApplicationRecord
   before_create :sum_subtotal
   before_create :sum_total_price
 
+  before_update :sum_subtotal
+  before_update :sum_total_price
+  before_update :order_date_past_check
+  
   before_save :order_date_past_check
 
   def self.update_status_order

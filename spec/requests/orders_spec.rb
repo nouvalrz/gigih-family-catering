@@ -61,36 +61,86 @@ RSpec.describe 'Categories', type: :request do
         } 
         expect(response).to have_http_status(:unprocessable_entity)
       end
+    end
+    context 'with non exits menu' do
+      let(:order_invalid_email) {FactoryBot.build(:order, email: 'halo@gigih')}
+      let(:order_invalid_date) {FactoryBot.build(:order, email: 'halo@gigih')}
+      it 'return error menu is not exits' do
+        post '/api/v1/orders', params: {
+          order: {
+              customer_email: 'nouvalr@gmail.com',
+              order_date: DateTime.now.strftime('%Y/%m/%d'),
+              menus: [
+                {id: 1, quantity: 12},
+                {id: 2, quantity: 12}
+              ]
+          }
+        }
+        expect(json['errors'][0]['title']).to eq('Menu with id: 1 is not exits')
+      end
       it 'returns a unprocessable entity status' do
         post '/api/v1/orders', params: {
           order: {
-              customer_email: '',
-              order_date: DateTime.now.strftime('%Y/%m/%d')
+              customer_email: 'nouvalr@gmail.com',
+              order_date: DateTime.now.strftime('%Y/%m/%d'),
+              menus: [
+                {id: 1, quantity: 12},
+                {id: 2, quantity: 12}
+              ]
           }
-        } 
+        }
         expect(response).to have_http_status(:unprocessable_entity)
       end
     end
-    # context 'with non exits category' do
-    #   let(:menu) {FactoryBot.build(:menu)}
-    #   before do
-    #     post '/api/v1/menus', params: {
-    #       menu: {
-    #         name: menu.name,
-    #         description: menu.description,
-    #         menus: [
-    #           {id: menu1.id, quantity: 12},
-    #           {id: menu2.id, quantity: 12}
-    #         ]
-    #       }
-    #     } 
-    #   end
-    #   it 'return error category is not exits' do
-    #     expect(json['errors'][0]['title']).to eq('Category with id : 1000 is not exits')
-    #   end
-    #   it 'returns a unprocessable entity status' do
-    #     expect(response).to have_http_status(:unprocessable_entity)
-    #   end
-    # end
+  end
+  describe 'PUT /update' do
+    context 'with valid parameters' do
+      let(:order) {FactoryBot.create(:order)}
+      let(:order_update) {FactoryBot.build(:order, order_date: DateTime.now.strftime('%Y/%m/%d'))}
+      let(:menu1) {FactoryBot.create(:menu)}
+      let(:menu2) {FactoryBot.create(:menu)}
+      before do
+        post '/api/v1/orders', params: {
+          order: {
+              customer_email: order_update.customer_email,
+              order_date: order_update.order_date,
+              menus: [
+                {id: menu1.id, quantity: 12},
+                {id: menu2.id, quantity: 12}
+              ]
+          }
+        }
+      end
+      it 'update the selected menu in the database' do
+        expect(json['data']['attributes']['customer_email']).to eq(order_update.customer_email)
+        expect(json['data']['attributes']['order_date']).to eq(order_update.order_date.strftime("%F"))
+      end
+      it 'returns a status 200' do
+        expect(response).to have_http_status(:success)
+      end
+    end
+    context 'with invalid parameter' do
+      let(:menu) {FactoryBot.create(:menu)}
+      let(:category_update) {FactoryBot.create(:category, name: 'Indonesia')}
+      before do
+        put "/api/v1/menus/#{menu.id}", params: {
+          menu: {
+            name: nil,
+            description: nil,
+            price: nil,
+            categories: [
+              {id: category_update.id}
+            ]
+          }
+        } 
+      end
+      it "returns error with nil in require attributes" do
+        expect(json['errors'][0]['title']).to eq("Name can't be blank")
+        expect(json['errors'][1]['title']).to eq("Price can't be blank")
+      end
+      it 'returns a unprocessable entity status' do
+        expect(response).to have_http_status(:unprocessable_entity)
+      end
+    end
   end
 end
