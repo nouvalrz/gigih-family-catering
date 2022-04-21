@@ -1,12 +1,17 @@
 class Order < ApplicationRecord
   has_many :order_details 
   has_many :menus, through: :order_details
+  validates :order_date, presence: :true
   validates :customer_email, presence: true, format: { with: /\A([^\}\{\]\[@\s\,]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\z/i , message: "Customer email not valid" }
 
 
   def add_menus(menus)
     menus.each do |menu|
-      self.order_details << OrderDetail.new(menu_id: menu[:id], quantity: menu[:quantity], menu_price: Menu.find_by_id(menu[:id]).price)
+      if Menu.find_by_id(menu[:id]).present?
+        self.order_details << OrderDetail.new(menu_id: menu[:id], quantity: menu[:quantity], menu_price: Menu.find_by_id(menu[:id]).price)
+      else
+        self.errors.add(:menu, "with id: #{menu[:id]} is not exits")
+      end
     end
   end
 

@@ -24,9 +24,14 @@ RSpec.describe Order, type: :model do
   end
   context 'invalid parameters' do
     let(:order_invalid_email){FactoryBot.build(:order, customer_email: "nouvalr@gmail")}
+    let(:order){FactoryBot.create(:order)}
     it 'return error when customer_email not valid' do
       order_invalid_email.valid?
       expect(order_invalid_email.errors[:customer_email]).to include("Customer email not valid")
+    end
+    it 'return error when menus is not exits' do
+      order.add_menus([{id: 19191919, quantity: 12}])
+      expect(order.errors[:menu]).to include('with id: 19191919 is not exits')
     end
   end
 end
