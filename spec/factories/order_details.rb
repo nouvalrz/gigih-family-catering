@@ -3,7 +3,7 @@ FactoryBot.define do
     association :order, factory: :order
     association :menu, factory: :menu
     menu_price { nil }
-    quantity { nil }
+    quantity { Faker::Number.between(from: 20, to: 100) }
     subtotal { nil }
   end
 end
