@@ -22,4 +22,11 @@ RSpec.describe Order, type: :model do
       expect(order.total_price).to eq(expected_total_price)
     end
   end
+  context 'invalid parameters' do
+    let(:order_invalid_email){FactoryBot.build(:order, customer_email: "nouvalr@gmail")}
+    it 'return error when customer_email not valid' do
+      order_invalid_email.valid?
+      expect(order_invalid_email.errors[:customer_email]).to include("Customer email not valid")
+    end
+  end
 end
