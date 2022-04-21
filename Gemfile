@@ -80,4 +80,5 @@ group :development, :test do
   gem 'rails-controller-testing'
   gem 'jsonapi-serializer', '~> 2.2'
   gem 'jsonapi-rspec', '~> 0.0.11'
+  gem 'whenever', require: false
 end
