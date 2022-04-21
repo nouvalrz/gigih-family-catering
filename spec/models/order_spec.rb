@@ -24,6 +24,7 @@ RSpec.describe Order, type: :model do
   end
   context 'invalid parameters' do
     let(:order_invalid_email){FactoryBot.build(:order, customer_email: "nouvalr@gmail")}
+    let(:order_invalid_date){FactoryBot.build(:order, order_date: "1945/08/17")}
     let(:order){FactoryBot.create(:order)}
     it 'return error when customer_email not valid' do
       order_invalid_email.valid?
@@ -32,6 +33,14 @@ RSpec.describe Order, type: :model do
     it 'return error when menus is not exits' do
       order.add_menus([{id: 19191919, quantity: 12}])
       expect(order.errors[:menu]).to include('with id: 19191919 is not exits')
+    end
+    it 'return error when menu quantity is not less than 1' do
+      order.add_menus([{id: 1, quantity: -12}])
+      expect(order.errors[:menu]).to include('quantity must more than 0')
+    end
+    it 'return error when order_date is past' do     
+      order_invalid_date.valid?
+      expect(order_invalid_date.errors[:order_date]).to include("Order date is past")
     end
   end
 end

@@ -2,6 +2,7 @@ class Order < ApplicationRecord
   has_many :order_details 
   has_many :menus, through: :order_details
   validates :order_date, presence: :true
+  validate :order_date_past_check
   validates :customer_email, presence: true, format: { with: /\A([^\}\{\]\[@\s\,]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\z/i , message: "Customer email not valid" }
 
 
@@ -12,6 +13,7 @@ class Order < ApplicationRecord
       else
         self.errors.add(:menu, "with id: #{menu[:id]} is not exits")
       end
+      self.errors.add(:menu, "quantity must more than 0") if menu[:quantity] < 1
     end
   end
 
@@ -27,5 +29,8 @@ class Order < ApplicationRecord
     end
   end
 
+  def order_date_past_check
+    self.errors.add(:order_date, "Order date is past") if order_date < Date.today
+  end
 
 end
