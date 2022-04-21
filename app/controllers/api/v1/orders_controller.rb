@@ -22,6 +22,17 @@ class Api::V1::OrdersController < ApplicationController
     end
   end
 
+  def destroy
+    order = Order.find_by(id: params[:id])
+    if order.nil?
+      head :unprocessable_entity
+    else
+      order.order_details.destroy_all
+      order.destroy
+      head :no_content
+    end
+  end
+
   private
   def order_params
     params.require(:order).permit(:customer_email, :order_date)
