@@ -6,6 +6,10 @@ class Order < ApplicationRecord
   validates :customer_email, presence: true, format: { with: /\A([^\}\{\]\[@\s\,]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\z/i , message: "Customer email not valid" }
 
 
+  def update_status_order
+    Order.where(status: 'UNPAID').update_all(status: 'CANCELED')
+  end
+
   def add_menus(menus)
     menus.each do |menu|
       if Menu.find_by_id(menu[:id]).present?
@@ -32,5 +36,6 @@ class Order < ApplicationRecord
   def order_date_past_check
     self.errors.add(:order_date, "Order date is past") if order_date < Date.today
   end
+
 
 end
