@@ -1,5 +1,22 @@
 class Api::V1::OrdersController < ApplicationController
   protect_from_forgery with: :null_session
+
+
+  def index
+    query_params = request.query_parameters
+    customer_email = query_params[:email].present? ? query_params[:email] : nil
+    more_than_price = query_params[:morethan].present? ? query_params[:morethan] : nil
+    less_than_price = query_params[:lessthan].present? ? query_params[:lessthan] : nil
+    start_date = query_params[:start_date].present? ? query_params[:start_date] : nil
+    end_date = query_params[:end_date].present? ? query_params[:end_date] : nil
+
+    orders = Order.filter_by_email(customer_email)
+
+    render json: OrderSerializer.new(orders, options).serializable_hash.to_json, status: :created
+
+  end
+
+
   def create
     order = Order.new(order_params)
     order.add_menus(order_menu_params[:menus])

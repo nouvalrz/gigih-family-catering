@@ -1,6 +1,13 @@
 class Order < ApplicationRecord
   has_many :order_details 
   has_many :menus, through: :order_details
+
+  scope :filter_by_email, -> (customer_email) { where customer_email: customer_email }
+  scope :filter_by_start_price, -> (location_id) { where location_id: location_id }
+  scope :filter_by_end_price, -> (location_id) { where location_id: location_id }
+  scope :filter_by_price_range, -> (location_id) { where location_id: location_id }
+  scope :filter_by_date_range, -> (location_id) { where location_id: location_id }
+
   validates :customer_email, presence: true, format: { with: /\A([^\}\{\]\[@\s\,]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\z/i , message: "not valid" }
   validates :order_date, presence: :true
 
@@ -25,8 +32,8 @@ class Order < ApplicationRecord
       return
     end
     menus.each do |menu|
-      if Menu.find_by_id(menu[:id]).present?
-        self.order_details << OrderDetail.new(menu_id: menu[:id], quantity: menu[:quantity], menu_price: Menu.find_by_id(menu[:id]).price)
+      if Menu.active_data.where(id: menu[:id]).present?
+        self.order_details << OrderDetail.new(menu_id: menu[:id], quantity: menu[:quantity], menu_price: Menu.active_data.where(id: menu[:id])[0].price)
       else
         self.errors.add(:menu, "with id: #{menu[:id]} is not exits")
       end
