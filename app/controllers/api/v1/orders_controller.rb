@@ -16,6 +16,15 @@ class Api::V1::OrdersController < ApplicationController
 
   end
 
+  def show
+    @order = Order.find_by(id: params[:id])
+    unless @order.nil?
+      render json: OrderSerializer.new(@order, options).serializable_hash.to_json 
+    else
+      head :not_found
+    end
+  end
+
 
   def create
     order = Order.new(order_params)

@@ -6,7 +6,11 @@ class Api::V1::MenusController < ApplicationController
   end
   def show
     @menu = Menu.find_by(id: params[:id])
-    render json: MenuSerializer.new(@menu, options).serializable_hash.to_json
+    unless @menu.nil?
+      render json: MenuSerializer.new(@menu, options).serializable_hash.to_json 
+    else
+      head :not_found
+    end
   end
 
   def create

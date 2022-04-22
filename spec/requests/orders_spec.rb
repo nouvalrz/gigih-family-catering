@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe 'Categories', type: :request do
+RSpec.describe 'Orders', type: :request do
   describe 'POST /create' do
     context 'with valid parameters' do
       let(:menu1) {FactoryBot.create(:menu)}
@@ -145,14 +145,12 @@ RSpec.describe 'Categories', type: :request do
   end
   describe 'DELETE /destroy' do
     context 'with exits records' do
-      before :each do
+      before do
         @order = FactoryBot.create(:order)
         @menu = FactoryBot.create(:menu)
-        @order_details = FactoryBot.create(:order_detail, order_id: 1, menu_id: 1)
+        @order_details = OrderDetail.create(order_id: @order.id, menu_id: @menu.id)
       end
       it 'remove the order in database' do
-        puts "ERROR"
-        puts Menu.first.inspect
         expect{ delete "/api/v1/orders/1" }.to change(Order, :count).by(-1)
       end
       it 'remove the menu_categories in database' do
@@ -172,5 +170,27 @@ RSpec.describe 'Categories', type: :request do
         expect(response).to have_http_status(422)
       end
     end
+  end
+  describe 'GET /show' do
+    context "with exits order record" do
+      before do
+        @order = FactoryBot.create(:order)
+      end
+      it 'return the order according to the id' do
+        get "/api/v1/orders/" + @order.id.to_s
+        expect(json['data']).to have_type('order')
+        expect(json['data']).to have_jsonapi_attributes(:customer_email, :order_date)
+      end
+      it 'returns status code 200' do
+        get "/api/v1/orders/" + @order.id.to_s
+        expect(response).to have_http_status(:success)
+      end
+    end
+    context "with non exits order record" do
+      it 'returns status code 404' do
+        get "/api/v1/orders/1298182989182981928919812" 
+        expect(response).to have_http_status(404)
+      end
+    end 
   end
 end
