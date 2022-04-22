@@ -1,5 +1,6 @@
 # Use this file to easily define all of your cron jobs.
 set :environment, "development"
+set :output, "log/cron.log"
 #
 # It's helpful, but not entirely necessary to understand cron before proceeding.
 # http://en.wikipedia.org/wiki/Cron
@@ -21,5 +22,5 @@ set :environment, "development"
 # Learn more: http://github.com/javan/whenever
 
 every 1.day, :at => '05:00 pm' do
-  runner "Order.update_status_order"
+  rake "order:cancel_order"
 end

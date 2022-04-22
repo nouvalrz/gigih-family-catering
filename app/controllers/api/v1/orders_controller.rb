@@ -10,7 +10,6 @@ class Api::V1::OrdersController < ApplicationController
     end
   end
 
-
   def create
     order = Order.new(order_params)
     order.add_menus(order_menu_params[:menus])
