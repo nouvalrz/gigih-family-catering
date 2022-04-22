@@ -19,8 +19,15 @@ RSpec.describe 'Orders', type: :request do
       }.to change(Order, :count).by(1)
       end
       it 'returns a created status' do
-        category = FactoryBot.build(:category)
-        post '/api/v1/categories', params: CategorySerializer.new(category).serializable_hash
+        post '/api/v1/orders', params: {
+          order: {
+              customer_email: Faker::Internet.email,
+              menus: [
+                {id: menu1.id, quantity: 12},
+                {id: menu2.id, quantity: 12}
+              ]
+          }
+        } 
         expect(response).to have_http_status(:created)
       end
     end
