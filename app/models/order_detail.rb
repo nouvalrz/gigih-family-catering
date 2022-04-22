@@ -11,6 +11,6 @@ class OrderDetail < ApplicationRecord
   end
 
   def set_menu_name
-    self.menu_name = Menu.find_by_id(self.menu_id).name
+    self.menu_name = Menu.find_by_id(self.menu_id).name if Menu.find_by_id(self.menu_id).present?
   end
 end
