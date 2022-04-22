@@ -1,20 +1,6 @@
 class Api::V1::OrdersController < ApplicationController
   protect_from_forgery with: :null_session
 
-
-  def index
-    query_params = request.query_parameters
-    customer_email = query_params[:email].present? ? query_params[:email] : nil
-    more_than_price = query_params[:morethan].present? ? query_params[:morethan] : nil
-    less_than_price = query_params[:lessthan].present? ? query_params[:lessthan] : nil
-    start_date = query_params[:start_date].present? ? query_params[:start_date] : nil
-    end_date = query_params[:end_date].present? ? query_params[:end_date] : nil
-
-    orders = Order.filter_by_email(customer_email)
-
-    render json: OrderSerializer.new(orders, options).serializable_hash.to_json, status: :created
-  end
-
   def show
     @order = Order.find_by(id: params[:id])
     unless @order.nil?
@@ -49,7 +35,7 @@ class Api::V1::OrdersController < ApplicationController
   
   def update_status
     order = Order.find_by(id: params[:id])
-    if (["PAID","UNPAID","CANCELED"].include? params.require(:status)) && (Order.find_by(id: params[:id]).present?)
+    if (["PAID","NEW","CANCELED"].include? params.require(:status)) && (Order.find_by(id: params[:id]).present?)
       order.update(params.permit(:status))
       render json: OrderSerializer.new(order).serializable_hash.to_json, status: :ok
     else
@@ -70,7 +56,7 @@ class Api::V1::OrdersController < ApplicationController
 
   private
   def order_params
-    params.require(:order).permit(:customer_email, :order_date)
+    params.require(:order).permit(:customer_email)
   end
 
   def order_menu_params

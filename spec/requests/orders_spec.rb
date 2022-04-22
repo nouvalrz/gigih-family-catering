@@ -10,7 +10,6 @@ RSpec.describe 'Orders', type: :request do
         post '/api/v1/orders', params: {
           order: {
               customer_email: Faker::Internet.email,
-              order_date: DateTime.now.strftime('%Y/%m/%d'),
               menus: [
                 {id: menu1.id, quantity: 12},
                 {id: menu2.id, quantity: 12}
@@ -34,7 +33,6 @@ RSpec.describe 'Orders', type: :request do
         post '/api/v1/orders', params: {
           order: {
               customer_email: '',
-              order_date: DateTime.now.strftime('%Y/%m/%d'),
               menus: [
                 {id: menu1.id, quantity: 12},
                 {id: menu2.id, quantity: 12}
@@ -46,8 +44,7 @@ RSpec.describe 'Orders', type: :request do
       it 'return error must have menu' do
         post '/api/v1/orders', params: {
           order: {
-              customer_email: '',
-              order_date: DateTime.now.strftime('%Y/%m/%d')
+              customer_email: ''
           }
         } 
         expect(json['errors'][0]['title']).to eq("Order must atleast have 1 menu")
@@ -55,8 +52,7 @@ RSpec.describe 'Orders', type: :request do
       it 'returns a unprocessable entity status' do
         post '/api/v1/orders', params: {
           order: {
-              customer_email: '',
-              order_date: DateTime.now.strftime('%Y/%m/%d')
+              customer_email: ''
           }
         } 
         expect(response).to have_http_status(:unprocessable_entity)
@@ -69,7 +65,6 @@ RSpec.describe 'Orders', type: :request do
         post '/api/v1/orders', params: {
           order: {
               customer_email: 'nouvalr@gmail.com',
-              order_date: DateTime.now.strftime('%Y/%m/%d'),
               menus: [
                 {id: 1, quantity: 12},
                 {id: 2, quantity: 12}
@@ -82,7 +77,6 @@ RSpec.describe 'Orders', type: :request do
         post '/api/v1/orders', params: {
           order: {
               customer_email: 'nouvalr@gmail.com',
-              order_date: DateTime.now.strftime('%Y/%m/%d'),
               menus: [
                 {id: 1, quantity: 12},
                 {id: 2, quantity: 12}
@@ -96,14 +90,13 @@ RSpec.describe 'Orders', type: :request do
   describe 'PUT /update' do
     context 'with valid parameters' do
       let(:order) {FactoryBot.create(:order)}
-      let(:order_update) {FactoryBot.build(:order, order_date: DateTime.now.strftime('%Y/%m/%d'))}
+      let(:order_update) {FactoryBot.build(:order)}
       let(:menu1) {FactoryBot.create(:menu)}
       let(:menu2) {FactoryBot.create(:menu)}
       before do
         post '/api/v1/orders', params: {
           order: {
               customer_email: order_update.customer_email,
-              order_date: order_update.order_date,
               menus: [
                 {id: menu1.id, quantity: 12},
                 {id: menu2.id, quantity: 12}
@@ -113,35 +106,11 @@ RSpec.describe 'Orders', type: :request do
       end
       it 'update the selected menu in the database' do
         expect(json['data']['attributes']['customer_email']).to eq(order_update.customer_email)
-        expect(json['data']['attributes']['order_date']).to eq(order_update.order_date.strftime("%F"))
       end
       it 'returns a status 200' do
         expect(response).to have_http_status(:success)
       end
     end
-    # context 'with invalid parameter' do
-    #   let(:menu) {FactoryBot.create(:menu)}
-    #   let(:category_update) {FactoryBot.create(:category, name: 'Indonesia')}
-    #   before do
-    #     put "/api/v1/menus/#{menu.id}", params: {
-    #       menu: {
-    #         name: nil,
-    #         description: nil,
-    #         price: nil,
-    #         categories: [
-    #           {id: category_update.id}
-    #         ]
-    #       }
-    #     } 
-    #   end
-    #   it "returns error with nil in require attributes" do
-    #     expect(json['errors'][0]['title']).to eq("Name can't be blank")
-    #     expect(json['errors'][1]['title']).to eq("Price can't be blank")
-    #   end
-    #   it 'returns a unprocessable entity status' do
-    #     expect(response).to have_http_status(:unprocessable_entity)
-    #   end
-    # end
   end
   describe 'DELETE /destroy' do
     context 'with exits records' do
@@ -179,7 +148,7 @@ RSpec.describe 'Orders', type: :request do
       it 'return the order according to the id' do
         get "/api/v1/orders/" + @order.id.to_s
         expect(json['data']).to have_type('order')
-        expect(json['data']).to have_jsonapi_attributes(:customer_email, :order_date)
+        expect(json['data']).to have_jsonapi_attributes(:customer_email)
       end
       it 'returns status code 200' do
         get "/api/v1/orders/" + @order.id.to_s
@@ -197,10 +166,10 @@ RSpec.describe 'Orders', type: :request do
     before do
       @order = FactoryBot.create(:order)
     end
-    context "with 'UNPAID', 'PAID', 'CANCELED'" do
-      it 'return success when update to UNPAID' do
+    context "with 'NEW', 'PAID', 'CANCELED'" do
+      it 'return success when update to NEW' do
         patch "/api/v1/orders/#{@order.id}", params: {
-          status: 'UNPAID'
+          status: 'NEW'
         }
         expect(response).to have_http_status(:ok)
       end
