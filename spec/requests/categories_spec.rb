@@ -32,12 +32,12 @@ RSpec.describe 'Categories', type: :request do
       it 'saves the new category in the database' do
         expect{
           category = FactoryBot.build(:category)
-          post '/api/v1/categories', params: CategorySerializer.new(category).serializable_hash
+          post '/api/v1/categories', params: {name: category.name}
         }.to change(Category, :count).by(1)
       end
       it 'returns a created status' do
         category = FactoryBot.build(:category)
-        post '/api/v1/categories', params: CategorySerializer.new(category).serializable_hash
+        post '/api/v1/categories', params: {name: category.name}
         expect(response).to have_http_status(:created)
       end
     end
@@ -45,8 +45,8 @@ RSpec.describe 'Categories', type: :request do
       before do
         category1 = FactoryBot.create(:category, name: 'Javanese')
         category2 = FactoryBot.build(:category, name: 'Javanese')
-        post '/api/v1/categories', params: CategorySerializer.new(category1).serializable_hash
-        post '/api/v1/categories', params: CategorySerializer.new(category2).serializable_hash
+        post '/api/v1/categories', params: {name: category1.name}
+        post '/api/v1/categories', params: {name: category2.name}
       end
       it 'returns error already been taken' do
         expect(json['errors'][0]['title']).to eq('Name has already been taken')
@@ -58,7 +58,7 @@ RSpec.describe 'Categories', type: :request do
     context 'with invalid parameter' do
       before do
         category = FactoryBot.build(:category, name: '')
-        post '/api/v1/categories', params: CategorySerializer.new(category).serializable_hash
+        post '/api/v1/categories', params: {name: category.name}
       end
       it "returns error name can't be blank" do
         expect(json['errors'][0]['title']).to eq("Name can't be blank")
@@ -73,7 +73,7 @@ RSpec.describe 'Categories', type: :request do
       before do
         category = FactoryBot.create(:category)
         category_update = FactoryBot.build(:category, name: 'Dessert')
-        put "/api/v1/categories/#{category.id}", params: CategorySerializer.new(category_update).serializable_hash
+        put "/api/v1/categories/#{category.id}", params: {name: category_update.name}
       end
       it 'update the selected category in the database' do
         category_update = FactoryBot.build(:category, name: 'Dessert')
@@ -88,7 +88,7 @@ RSpec.describe 'Categories', type: :request do
         category1 = FactoryBot.create(:category, name: 'Dessert')
         category2 = FactoryBot.create(:category, name: 'Beverage')
         category_update = FactoryBot.build(:category, name: 'Dessert')
-        put "/api/v1/categories/#{category2.id}", params: CategorySerializer.new(category_update).serializable_hash
+        put "/api/v1/categories/#{category2.id}", params: {name: category_update.name}
       end
       it 'returns error already been taken' do
         expect(json['errors'][0]['title']).to eq('Name has already been taken')
@@ -101,7 +101,7 @@ RSpec.describe 'Categories', type: :request do
       before do
         category = FactoryBot.create(:category, name: 'Dessert')
         category_update = FactoryBot.build(:category, name: '')
-        put "/api/v1/categories/#{category.id}", params: CategorySerializer.new(category_update).serializable_hash
+        put "/api/v1/categories/#{category.id}", params: {name: category_update.name}
       end
       it "returns error name can't be blank" do
         expect(json['errors'][0]['title']).to eq("Name can't be blank")

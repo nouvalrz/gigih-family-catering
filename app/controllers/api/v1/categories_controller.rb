@@ -9,7 +9,7 @@ class Api::V1::CategoriesController < ApplicationController
     render json: CategorySerializer.new(@category).serializable_hash.to_json
   end
   def create
-    category = Category.new(category_params)
+    category = Category.new(name: category_params[:name])
     if category.save
       render json: CategorySerializer.new(category).serializable_hash.to_json, status: :created
     else
@@ -18,7 +18,7 @@ class Api::V1::CategoriesController < ApplicationController
   end
   def update
     category = Category.find_by(id: params[:id])
-    if category.update(category_params)
+    if category.update(name: category_params[:name])
       render json: CategorySerializer.new(category).serializable_hash.to_json, status: 200
     else
       render json: ErrorSerializer.serialize(category.errors), status: :unprocessable_entity
@@ -35,8 +35,6 @@ class Api::V1::CategoriesController < ApplicationController
   end
   private
   def category_params
-    params.require(:data)
-          .require(:attributes)
-          .permit(:name)
+    params.permit(:name)
   end
 end
