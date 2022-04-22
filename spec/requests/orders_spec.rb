@@ -119,29 +119,29 @@ RSpec.describe 'Orders', type: :request do
         expect(response).to have_http_status(:success)
       end
     end
-    context 'with invalid parameter' do
-      let(:menu) {FactoryBot.create(:menu)}
-      let(:category_update) {FactoryBot.create(:category, name: 'Indonesia')}
-      before do
-        put "/api/v1/menus/#{menu.id}", params: {
-          menu: {
-            name: nil,
-            description: nil,
-            price: nil,
-            categories: [
-              {id: category_update.id}
-            ]
-          }
-        } 
-      end
-      it "returns error with nil in require attributes" do
-        expect(json['errors'][0]['title']).to eq("Name can't be blank")
-        expect(json['errors'][1]['title']).to eq("Price can't be blank")
-      end
-      it 'returns a unprocessable entity status' do
-        expect(response).to have_http_status(:unprocessable_entity)
-      end
-    end
+    # context 'with invalid parameter' do
+    #   let(:menu) {FactoryBot.create(:menu)}
+    #   let(:category_update) {FactoryBot.create(:category, name: 'Indonesia')}
+    #   before do
+    #     put "/api/v1/menus/#{menu.id}", params: {
+    #       menu: {
+    #         name: nil,
+    #         description: nil,
+    #         price: nil,
+    #         categories: [
+    #           {id: category_update.id}
+    #         ]
+    #       }
+    #     } 
+    #   end
+    #   it "returns error with nil in require attributes" do
+    #     expect(json['errors'][0]['title']).to eq("Name can't be blank")
+    #     expect(json['errors'][1]['title']).to eq("Price can't be blank")
+    #   end
+    #   it 'returns a unprocessable entity status' do
+    #     expect(response).to have_http_status(:unprocessable_entity)
+    #   end
+    # end
   end
   describe 'DELETE /destroy' do
     context 'with exits records' do
@@ -192,5 +192,38 @@ RSpec.describe 'Orders', type: :request do
         expect(response).to have_http_status(404)
       end
     end 
+  end
+  describe 'PATCH /update_status' do
+    before do
+      @order = FactoryBot.create(:order)
+    end
+    context "with 'UNPAID', 'PAID', 'CANCELED'" do
+      it 'return success when update to UNPAID' do
+        patch "/api/v1/orders/#{@order.id}", params: {
+          status: 'UNPAID'
+        }
+        expect(response).to have_http_status(:ok)
+      end
+      it 'return success when update to PAID' do
+        patch "/api/v1/orders/#{@order.id}", params: {
+          status: 'PAID'
+        }
+        expect(response).to have_http_status(:ok)
+      end
+      it 'return success when update to CANCELED' do
+        patch "/api/v1/orders/#{@order.id}", params: {
+          status: 'CANCELED'
+        }
+        expect(response).to have_http_status(:ok)
+      end
+    end
+    context "without valid parameters" do
+      it 'return error when update to invalid status' do
+        patch "/api/v1/orders/#{@order.id}", params: {
+          status: 'MISSING'
+        }
+        expect(response).to have_http_status(422)
+      end
+    end
   end
 end

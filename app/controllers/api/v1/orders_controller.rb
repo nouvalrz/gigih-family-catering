@@ -13,7 +13,6 @@ class Api::V1::OrdersController < ApplicationController
     orders = Order.filter_by_email(customer_email)
 
     render json: OrderSerializer.new(orders, options).serializable_hash.to_json, status: :created
-
   end
 
   def show
@@ -45,6 +44,16 @@ class Api::V1::OrdersController < ApplicationController
       render json: OrderSerializer.new(order, options).serializable_hash.to_json, status: :created
     else
       render json: ErrorSerializer.serialize(order.errors), status: :unprocessable_entity
+    end
+  end
+  
+  def update_status
+    order = Order.find_by(id: params[:id])
+    if (["PAID","UNPAID","CANCELED"].include? params.require(:status)) && (Order.find_by(id: params[:id]).present?)
+      order.update(params.permit(:status))
+      render json: OrderSerializer.new(order).serializable_hash.to_json, status: :ok
+    else
+      render json: {status: "is invalid or order not exits"}, status: :unprocessable_entity
     end
   end
 
