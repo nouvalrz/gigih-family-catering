@@ -22,7 +22,7 @@ module RailsRuby3
     config.action_dispatch.default_headers = {
       'X-Frame-Options' => 'ALLOWFROM replit.com'
     }
-    config.time_zone = 'Jakarta'
+    # config.time_zone = 'Jakarta'
     # config.active_record.default_timezone = :local
   end
 end
