@@ -202,4 +202,13 @@ RSpec.describe 'Orders', type: :request do
       end
     end
   end
+  describe "PATCH /update_status_all" do
+    before do
+      @order = FactoryBot.create(:order)
+    end
+    it 'update all orders with NEW status to be CANCELED' do
+      patch "/api/v1/orders/update-status"
+      expect(Order.first.status).to eq('CANCELED')
+    end 
+  end
 end

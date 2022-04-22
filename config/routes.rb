@@ -7,6 +7,7 @@ Rails.application.routes.draw do
       resources :reports, :only => [:index]
 
 
+      patch '/orders/update-status', to: 'orders#update_status_all'
       patch '/orders/:id', to: 'orders#update_status'
       put '/orders/:id', to: 'orders#update'
     end

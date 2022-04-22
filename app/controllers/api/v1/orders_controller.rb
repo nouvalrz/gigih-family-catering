@@ -42,6 +42,10 @@ class Api::V1::OrdersController < ApplicationController
     end
   end
 
+  def update_status_all
+    Order.update_status_order
+  end
+
   def destroy
     order = Order.find_by(id: params[:id])
     if order.nil?
