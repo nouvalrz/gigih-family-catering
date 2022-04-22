@@ -23,6 +23,6 @@ module RailsRuby3
       'X-Frame-Options' => 'ALLOWFROM replit.com'
     }
     config.time_zone = 'Jakarta'
-    config.active_record.default_timezone = :local
+    # config.active_record.default_timezone = :local
   end
 end
