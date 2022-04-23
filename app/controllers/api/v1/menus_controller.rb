@@ -5,7 +5,7 @@ class Api::V1::MenusController < ApplicationController
     render json: MenuSerializer.new(menus, options).serializable_hash.to_json
   end
   def show
-    @menu = Menu.find_by(id: params[:id]).where(is_deleted: 0)
+    @menu = Menu.where(id: params[:id]).where(is_deleted: 0)
     unless @menu.nil?
       render json: MenuSerializer.new(@menu, options).serializable_hash.to_json 
     else
