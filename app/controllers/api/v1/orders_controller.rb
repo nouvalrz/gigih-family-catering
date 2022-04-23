@@ -55,11 +55,11 @@ class Api::V1::OrdersController < ApplicationController
   def destroy
     order = Order.find_by(id: params[:id])
     if order.nil?
-      head :unprocessable_entity
+      render json: {status: "NOT EXIST"}, status: :unprocessable_entity
     else
       order.order_details.destroy_all
       order.destroy
-      head :no_content
+      render json: {status: "SUCCESS"}, status: :ok
     end
   end
 
