@@ -6,10 +6,10 @@ class Api::V1::MenusController < ApplicationController
   end
   def show
     @menu = Menu.where(id: params[:id]).where(is_deleted: 0)
-    unless @menu.nil?
+    unless @menu.empty?
       render json: MenuSerializer.new(@menu, options).serializable_hash.to_json 
     else
-      head :not_found
+      render json: {status: "NOT EXITS"}, status: :not_found
     end
   end
 
