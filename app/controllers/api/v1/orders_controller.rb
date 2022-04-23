@@ -49,6 +49,7 @@ class Api::V1::OrdersController < ApplicationController
 
   def update_status_all
     Order.update_status_order
+    render json: {status: "SUCCESS"}, status: :ok
   end
 
   def destroy
