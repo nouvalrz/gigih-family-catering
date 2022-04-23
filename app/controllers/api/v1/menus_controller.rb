@@ -1,11 +1,11 @@
 class Api::V1::MenusController < ApplicationController
   protect_from_forgery with: :null_session
   def index
-    menus = Menu.all
+    menus = Menu.where(is_deleted: 0)
     render json: MenuSerializer.new(menus, options).serializable_hash.to_json
   end
   def show
-    @menu = Menu.find_by(id: params[:id])
+    @menu = Menu.find_by(id: params[:id]).where(is_deleted: 0)
     unless @menu.nil?
       render json: MenuSerializer.new(@menu, options).serializable_hash.to_json 
     else
