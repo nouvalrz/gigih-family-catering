@@ -134,7 +134,7 @@ RSpec.describe 'Orders', type: :request do
       end
       it 'returns status code 204' do
         delete "/api/v1/orders/1" 
-        expect(response).to have_http_status(204)
+        expect(response).to have_http_status(200)
       end
     end
     context 'with non exists records' do

@@ -26,7 +26,7 @@ RSpec.describe 'Menus', type: :request do
       menu_categories = FactoryBot.create(:menu_category)
       menu = Menu.first
       get "/api/v1/menus/#{menu.id}"
-      expect(assigns(:menu)).to eq menu
+      expect(json['data'][0]).to have_type('menu')
       expect(json['included'][0]).to have_type(:category)
     end
   end
@@ -188,17 +188,19 @@ RSpec.describe 'Menus', type: :request do
   describe 'DELETE /destroy' do
     context 'with exits records' do
       before :each do
-        @menu_category = FactoryBot.create(:menu_category)
+        @menu = FactoryBot.create(:menu)
       end
       it 'remove the menu in database' do
-        expect{ delete "/api/v1/menus/1" }.to change(Menu, :count).by(-1)
+        delete "/api/v1/menus/#{@menu.id}" 
+        expect(Menu.first.is_deleted).to eq(1)
       end
       it 'remove the menu_categories in database' do
-        expect{ delete "/api/v1/menus/1" }.to change(MenuCategory, :count).by(-1)
+        delete "/api/v1/menus/#{@menu.id}" 
+        expect(Menu.first.categories).to eq([])
       end
       it 'returns status code 204' do
         delete "/api/v1/menus/1" 
-        expect(response).to have_http_status(204)
+        expect(response).to have_http_status(200)
       end
     end
     context 'with non exists records' do

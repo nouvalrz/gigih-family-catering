@@ -43,9 +43,9 @@ class Api::V1::MenusController < ApplicationController
   end
 
   def destroy
-    menu = Menu.where(id: params[:id]).where(is_deleted: 0)
-    if menu.nil? || menu.empty?
-      head :unprocessable_entity
+    menu = Menu.where(id: params[:id]).where(is_deleted: 0)[0]
+    if menu.nil?
+      render json: {status: "NOT EXIST"}, status: :unprocessable_entity
     else
       menu.categories.destroy_all
       menu.update(is_deleted: 1)
