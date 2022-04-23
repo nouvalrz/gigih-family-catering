@@ -46,8 +46,9 @@ Build an API based catering management application using Ruby on Rails This cate
 
 ## Entity Relationship Diagram
 
+<img src="Catering Management ERD.jpg" width=1000>
 
-
+### My Assumptions
 I created the database based on my assumptions about the case study, here it is:
 1. The user of this application is only the owner
 2. The `order_details.menu_price` in the order record is not referenced to the `menus` table so that it will never be updated with the latest price
@@ -60,6 +61,15 @@ I created the database based on my assumptions about the case study, here it is:
 9. The order date is considered from when the data was added (refer to `created_at`)
 
 ## API Documentation/Specification
-API Specification using https://jsonapi.org/ standarization.
+API Specification using https://jsonapi.org/ standarization. And also using JSON:API Serializer gem.
 
 [![Run in Postman](https://run.pstmn.io/button.svg)](https://app.getpostman.com/run-collection/15761887-db1940df-9252-4726-9180-75071cfd7ef9?action=collection%2Ffork&collection-url=entityId%3D15761887-db1940df-9252-4726-9180-75071cfd7ef9%26entityType%3Dcollection%26workspaceId%3D9dd5c971-fcf2-42e2-8fce-0406681c03a3)
+
+## Auto Cancelation for Order Status Fetaures
+I have created a feature to change the order status to canceled after 5 pm if it has not been paid. I'm using a cronjob set using a gem named `Whenever`.
+
+To see the configuration of the schduled cron job, see the `config\schedule.rb` file and the rake file used is in `lib\tasks\order.rake`.
+
+So for the mechanism, I created a static method on the `Order.set_update_status` whose function will change all order statuses to `CANCELED` on unpaid orders. Then with a cronjob I call the method every 5 pm.
+
+NOTES! cron job will use the time available on the server. So you have to adjust to your own time.
