@@ -1,6 +1,11 @@
 class Api::V1::OrdersController < ApplicationController
   protect_from_forgery with: :null_session
 
+  def index
+    orders = Order.all
+    render json: OrderSerializer.new(orders, options).serializable_hash.to_json 
+  end
+
   def show
     @order = Order.find_by(id: params[:id])
     unless @order.nil?
