@@ -28,6 +28,7 @@ class Api::V1::MenusController < ApplicationController
   end
 
   def update
+    return render json: {status: "MENU NOT EXITS"}, status: :not_found if Menu.where(id: params[:id]).where(is_deleted: 0).empty?
     menu = Menu.find_by(id: params[:id])
     menu.categories.destroy_all
     if menu.update(menu_params) && menu.category_exits?(menu_category_params)
@@ -42,8 +43,8 @@ class Api::V1::MenusController < ApplicationController
   end
 
   def destroy
-    menu = Menu.find_by(id: params[:id])
-    if menu.nil?
+    menu = Menu.where(id: params[:id]).where(is_deleted: 0)
+    if menu.nil? || menu.empty?
       head :unprocessable_entity
     else
       menu.categories.destroy_all
