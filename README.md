@@ -65,7 +65,7 @@ API Specification using https://jsonapi.org/ standarization. And also using JSON
 
 [![Run in Postman](https://run.pstmn.io/button.svg)](https://app.getpostman.com/run-collection/15761887-db1940df-9252-4726-9180-75071cfd7ef9?action=collection%2Ffork&collection-url=entityId%3D15761887-db1940df-9252-4726-9180-75071cfd7ef9%26entityType%3Dcollection%26workspaceId%3D9dd5c971-fcf2-42e2-8fce-0406681c03a3)
 
-## Auto Cancelation for Order Status Fetaures
+## Auto Cancelation for Order Status
 I have created a feature to change the order status to canceled after 5 pm if it has not been paid. I'm using a cronjob set using a gem named `Whenever`.
 
 To see the configuration of the schduled cron job, see the `config\schedule.rb` file and the rake file used is in `lib\tasks\order.rake`.
@@ -73,3 +73,10 @@ To see the configuration of the schduled cron job, see the `config\schedule.rb` 
 So for the mechanism, I created a static method on the `Order.set_update_status` whose function will change all order statuses to `CANCELED` on unpaid orders. Then with a cronjob I call the method every 5 pm.
 
 NOTES! cron job will use the time available on the server. So you have to adjust to your own time.
+
+## Reports Filtering
+I created a filter feature for the report by email, total price, and time range. To use it, please enter the URL params according to the desired filter.
+`customer_email`, `start_price`, `end_price`, `start_date`, `end_date`.
+This means that you can dynamically filter with these three parameters.
+
+For more information, please open the API docs on the Postman button above.
