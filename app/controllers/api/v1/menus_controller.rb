@@ -47,8 +47,8 @@ class Api::V1::MenusController < ApplicationController
       head :unprocessable_entity
     else
       menu.categories.destroy_all
-      menu.destroy
-      head :no_content
+      menu.update(is_deleted: 1)
+      render json: {status: "SUCCESS"}, status: :ok
     end
   end
 
